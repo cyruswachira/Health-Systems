@@ -3,7 +3,7 @@ import { FaMale, FaFemale } from 'react-icons/fa';
 
 const ClientCard = ({ client }) => (
   <div className="bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
-    {/* Header with Icon and Name */}
+
     <div className="flex items-center space-x-6 mb-6">
       {client.gender === 'Male' ? (
         <FaMale className="text-blue-400 text-6xl" />
@@ -16,7 +16,6 @@ const ClientCard = ({ client }) => (
       </div>
     </div>
 
-    {/* Phone and Gender */}
     <div className="mt-4 mb-6">
       <p className="text-lg text-gray-300">
         <span className="font-medium text-white">Phone:</span> {client.phone}
@@ -26,7 +25,7 @@ const ClientCard = ({ client }) => (
       </p>
     </div>
 
-    {/* View Profile Button */}
+
     <div className="flex justify-center">
       <Link
         to={`/clients/${client.id}`}

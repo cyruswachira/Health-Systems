@@ -31,7 +31,7 @@ const Dashboard = () => {
        <span className="text-yellow-400 font-semibold">Health Information System</span><br />
         </p>
 
-        {/* Search Bar */}
+        
         <div className="flex items-center gap-4 bg-gray-900 p-4 rounded-xl shadow mb-10">
           <FaSearch className="text-gray-400 text-xl" />
           <input
@@ -43,7 +43,7 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Stats Cards - Centered Horizontally with Equal Size */}
+        
         <div className="flex justify-center gap-8 mb-10">
           <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-center flex-1">
             <h2 className="text-3xl font-bold text-blue-500">{programs.length}</h2>
@@ -55,7 +55,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Clients Cards - Display in Two Rows */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredClients.map((client, index) => (
             <div key={index} className="bg-gray-900 p-5 rounded-xl shadow-lg">

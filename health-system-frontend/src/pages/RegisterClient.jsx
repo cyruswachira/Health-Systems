@@ -7,7 +7,6 @@ const RegisterClient = () => {
   const [selectedPrograms, setSelectedPrograms] = useState([]);
   const [gender, setGender] = useState('');
 
-  // Dummy programs for now
   const programs = [
     { id: 'HIV', name: 'HIV' },
     { id: 'TB', name: 'TB' },
@@ -41,7 +40,7 @@ const RegisterClient = () => {
       <form onSubmit={handleSubmit} className="max-w-lg w-full bg-gray-800 p-8 rounded-xl shadow-xl">
         <h2 className="text-3xl font-bold text-center text-white mb-6">Register Client</h2>
 
-        {/* Client Name */}
+      
         <input
           type="text"
           placeholder="Client Name"
@@ -50,7 +49,7 @@ const RegisterClient = () => {
           onChange={(e) => setName(e.target.value)}
         />
 
-        {/* Client Email */}
+      
         <input
           type="email"
           placeholder="Email"
@@ -59,7 +58,7 @@ const RegisterClient = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* Phone Number */}
+        
         <input
           type="tel"
           placeholder="Phone Number"
@@ -68,7 +67,7 @@ const RegisterClient = () => {
           onChange={(e) => setPhone(e.target.value)}
         />
 
-        {/* Programs Selection */}
+      
         <div className="mb-6">
           <p className="text-white mb-2">Select Programs (max 2)</p>
           <div className="flex gap-4 flex-wrap">
@@ -98,7 +97,7 @@ const RegisterClient = () => {
           </div>
         </div>
 
-        {/* Gender Selection */}
+      
         <div className="mb-6">
           <p className="text-white mb-2">Gender</p>
           <select
@@ -112,7 +111,7 @@ const RegisterClient = () => {
           </select>
         </div>
 
-        {/* Submit Button */}
+        
         <button
           type="submit"
           className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"

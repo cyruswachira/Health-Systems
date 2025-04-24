@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaMale, FaFemale } from 'react-icons/fa'; // Import gender icons
+import { FaMale, FaFemale } from 'react-icons/fa'; 
 import ClientCard from '../components/ClientCard';
 
 const Clients = () => {
@@ -10,8 +10,8 @@ const Clients = () => {
       email: 'john@example.com',
       phone: '+254712345678',
       age: 30,
-      gender: 'Male', // Gender info
-      image: 'https://via.placeholder.com/150', // Placeholder image URL
+      gender: 'Male', 
+      image: 'https://via.placeholder.com/150', 
     },
     {
       id: 2,
@@ -19,8 +19,8 @@ const Clients = () => {
       email: 'jane@example.com',
       phone: '+254798765432',
       age: 28,
-      gender: 'Female', // Gender info
-      image: 'https://via.placeholder.com/150', // Placeholder image URL
+      gender: 'Female', 
+      image: 'https://via.placeholder.com/150', 
     }
   ];
 

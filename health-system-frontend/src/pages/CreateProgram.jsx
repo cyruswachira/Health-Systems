@@ -7,7 +7,7 @@ const CreateProgram = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({ name, description });
-    // Add API call to backend here
+  
   };
 
   return (
