@@ -10,7 +10,7 @@ const RegisterClient = () => {
 
   useEffect(() => {
     // Fetch available programs from the backend
-    fetch('http://localhost:5000/api/programs')  // Replace with your actual Flask endpoint
+    fetch('http://localhost:5000/api/programs')  
       .then((res) => res.json())
       .then((data) => setPrograms(data))
       .catch((err) => console.error('Error fetching programs:', err));
@@ -45,7 +45,7 @@ const RegisterClient = () => {
       .then((res) => {
         if (res.ok) {
           alert('Client registered successfully!');
-          // Optionally, reset form fields here
+          
         } else {
           alert('Failed to register client.');
         }

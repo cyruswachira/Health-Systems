@@ -1,13 +1,48 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const CreateProgram = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(null); 
+  const navigate = useNavigate(); 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ name, description });
-  
+
+    const programData = {
+      name,
+      description,
+    };
+
+    setLoading(true); 
+    setError(null); 
+
+    try {
+      
+      const response = await fetch('/api/programs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(programData),
+      });
+
+      if (response.ok) {
+        
+        navigate('/programs');
+      } else {
+        
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to create program');
+      }
+    } catch (error) {
+      
+      setError('Error submitting program: ' + error.message);
+    } finally {
+      setLoading(false); 
+    }
   };
 
   return (
@@ -17,7 +52,14 @@ const CreateProgram = () => {
         className="max-w-md w-full bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl text-white"
       >
         <h2 className="text-2xl font-bold text-blue-400 mb-6 text-center">Create Program</h2>
+
         
+        {error && (
+          <div className="text-red-500 text-center mb-4">
+            {error}
+          </div>
+        )}
+
         <input
           type="text"
           placeholder="Program Name"
@@ -26,7 +68,7 @@ const CreateProgram = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        
+
         <textarea
           placeholder="Description"
           className="w-full p-3 mb-6 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -35,12 +77,13 @@ const CreateProgram = () => {
           rows="4"
           required
         ></textarea>
-        
+
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold shadow-lg transition-all duration-300"
+          disabled={loading} 
         >
-          Create
+          {loading ? 'Creating...' : 'Create'}
         </button>
       </form>
     </div>
