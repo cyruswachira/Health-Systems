@@ -1,45 +1,33 @@
-import { Link } from 'react-router-dom';
-import { FaMale, FaFemale } from 'react-icons/fa'; 
-import ClientCard from '../components/ClientCard';
+import { useState, useEffect } from 'react';
 
 const Clients = () => {
-  const clients = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '+254712345678',
-      age: 30,
-      gender: 'Male', 
-      image: 'https://via.placeholder.com/150', 
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      phone: '+254798765432',
-      age: 28,
-      gender: 'Female', 
-      image: 'https://via.placeholder.com/150', 
-    }
-  ];
+  const [clients, setClients] = useState([]);
+
+  useEffect(() => {
+    // Fetch the list of registered clients from the backend
+    fetch('http://localhost:5000/api/clients')  // Replace with your Flask endpoint
+      .then((res) => res.json())
+      .then((data) => setClients(data))
+      .catch((err) => console.error('Error fetching clients:', err));
+  }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-400">Clients</h1>
-        <Link
-          to="/clients/register"
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl shadow transition"
-        >
-          Register Client
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {clients.map((client) => (
-          <ClientCard key={client.id} client={client} />
-        ))}
+    <div className="min-h-screen bg-black p-8">
+      <h2 className="text-3xl font-bold text-white text-center mb-6">Registered Clients</h2>
+      <div className="flex flex-wrap justify-center gap-6">
+        {clients.length === 0 ? (
+          <p className="text-white">No clients registered yet.</p>
+        ) : (
+          clients.map((client) => (
+            <div key={client.id} className="bg-gray-800 text-white p-6 rounded-xl shadow-md w-60">
+              <h3 className="text-xl font-semibold">{client.name}</h3>
+              <p>Email: {client.email}</p>
+              <p>Phone: {client.phone}</p>
+              <p>Gender: {client.gender}</p>
+              <p>Programs: {client.selectedPrograms.join(', ')}</p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

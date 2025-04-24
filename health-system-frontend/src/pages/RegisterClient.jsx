@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const RegisterClient = () => {
+  const [programs, setPrograms] = useState([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [selectedPrograms, setSelectedPrograms] = useState([]);
   const [gender, setGender] = useState('');
 
-  const programs = [
-    { id: 'HIV', name: 'HIV' },
-    { id: 'TB', name: 'TB' },
-    { id: 'Malaria', name: 'Malaria' },
-    { id: 'Cancer', name: 'Cancer' }, 
-    { id: 'Diabetes', name: 'Diabetes' },
-  ];
+  useEffect(() => {
+    // Fetch available programs from the backend
+    fetch('http://localhost:5000/api/programs')  // Replace with your actual Flask endpoint
+      .then((res) => res.json())
+      .then((data) => setPrograms(data))
+      .catch((err) => console.error('Error fetching programs:', err));
+  }, []);
 
   const handleProgramChange = (e) => {
     const { value, checked } = e.target;
@@ -32,7 +33,24 @@ const RegisterClient = () => {
       alert('You can register for a maximum of 2 programs');
       return;
     }
-    console.log({ name, email, phone, selectedPrograms, gender });
+
+    const clientData = { name, email, phone, selectedPrograms, gender };
+
+    // Send client data to the backend
+    fetch('http://localhost:5000/api/clients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(clientData),
+    })
+      .then((res) => {
+        if (res.ok) {
+          alert('Client registered successfully!');
+          // Optionally, reset form fields here
+        } else {
+          alert('Failed to register client.');
+        }
+      })
+      .catch((err) => console.error('Error registering client:', err));
   };
 
   return (
@@ -40,7 +58,6 @@ const RegisterClient = () => {
       <form onSubmit={handleSubmit} className="max-w-lg w-full bg-gray-800 p-8 rounded-xl shadow-xl">
         <h2 className="text-3xl font-bold text-center text-white mb-6">Register Client</h2>
 
-      
         <input
           type="text"
           placeholder="Client Name"
@@ -49,7 +66,6 @@ const RegisterClient = () => {
           onChange={(e) => setName(e.target.value)}
         />
 
-      
         <input
           type="email"
           placeholder="Email"
@@ -58,7 +74,6 @@ const RegisterClient = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        
         <input
           type="tel"
           placeholder="Phone Number"
@@ -67,7 +82,6 @@ const RegisterClient = () => {
           onChange={(e) => setPhone(e.target.value)}
         />
 
-      
         <div className="mb-6">
           <p className="text-white mb-2">Select Programs (max 2)</p>
           <div className="flex gap-4 flex-wrap">
@@ -97,7 +111,6 @@ const RegisterClient = () => {
           </div>
         </div>
 
-      
         <div className="mb-6">
           <p className="text-white mb-2">Gender</p>
           <select
@@ -111,7 +124,6 @@ const RegisterClient = () => {
           </select>
         </div>
 
-        
         <button
           type="submit"
           className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"

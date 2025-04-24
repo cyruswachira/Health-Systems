@@ -1,26 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [clients, setClients] = useState([]);
+  const [programs, setPrograms] = useState([]);
 
-  const clients = [
-    { name: 'Jane Doe', email: 'jane@example.com', program: 'HIV' },
-    { name: 'John Smith', email: 'john@example.com', program: 'TB' },
-    { name: 'Mary Johnson', email: 'mary@example.com', program: 'HIV' },
-    { name: 'Paul Walker', email: 'paul@example.com', program: 'TB' },
-    { name: 'Emma Stone', email: 'emma@example.com', program: 'HIV' },
-    { name: 'Lucas Brown', email: 'lucas@example.com', program: 'TB' }
-  ];
+  // Fetch clients and programs from the API when the component mounts
+  useEffect(() => {
+    // Fetch clients from API
+    const fetchClients = async () => {
+      try {
+        const response = await fetch('/api/clients'); // Replace with your API URL
+        const data = await response.json();
+        setClients(data);
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+      }
+    };
 
-  const programs = [
-    { name: 'TB', description: 'Tuberculosis treatment and prevention' },
-    { name: 'HIV', description: 'HIV testing and support' }
-  ];
+    // Fetch programs from API
+    const fetchPrograms = async () => {
+      try {
+        const response = await fetch('/api/programs'); // Replace with your API URL
+        const data = await response.json();
+        setPrograms(data);
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+      }
+    };
 
-  const filteredClients = clients.filter(client =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.program.toLowerCase().includes(searchTerm.toLowerCase())
+    fetchClients();
+    fetchPrograms();
+  }, []);
+
+  // Filtered clients based on search term
+  const filteredClients = clients.filter(
+    client =>
+      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.program.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Filtered programs based on search term
+  const filteredPrograms = programs.filter(program =>
+    program.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -28,22 +51,23 @@ const Dashboard = () => {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-extrabold text-blue-400 mb-6">Dashboard</h1>
         <p className="text-lg text-gray-300 mb-8">
-       <span className="text-yellow-400 font-semibold">Health Information System</span><br />
+          <span className="text-yellow-400 font-semibold">Health Information System</span>
+          <br />
         </p>
 
-        
+        {/* Search Input */}
         <div className="flex items-center gap-4 bg-gray-900 p-4 rounded-xl shadow mb-10">
           <FaSearch className="text-gray-400 text-xl" />
           <input
             type="text"
-            placeholder="Search clients by name or program..."
+            placeholder="Search clients or programs..."
             className="bg-transparent outline-none text-white w-full"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        
+        {/* Dashboard Stats */}
         <div className="flex justify-center gap-8 mb-10">
           <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-center flex-1">
             <h2 className="text-3xl font-bold text-blue-500">{programs.length}</h2>
@@ -55,18 +79,36 @@ const Dashboard = () => {
           </div>
         </div>
 
-        
+        {/* Display Clients */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredClients.map((client, index) => (
-            <div key={index} className="bg-gray-900 p-5 rounded-xl shadow-lg">
+          {filteredClients.map((client) => (
+            <div key={client.id} className="bg-gray-900 p-5 rounded-xl shadow-lg">
               <h3 className="text-xl font-semibold text-white mb-2">{client.name}</h3>
               <p className="text-gray-400">Email: {client.email}</p>
-              <p className="text-gray-400">Program: <span className="text-yellow-400 font-semibold">{client.program}</span></p>
+              <p className="text-gray-400">
+                Program: <span className="text-yellow-400 font-semibold">{client.program}</span>
+              </p>
             </div>
           ))}
           {filteredClients.length === 0 && (
             <p className="text-gray-400 text-center col-span-full">No clients match your search.</p>
           )}
+        </div>
+
+        {/* Display Programs */}
+        <div className="mt-10">
+          <h2 className="text-3xl font-semibold text-blue-400 mb-4">Programs</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPrograms.map((program) => (
+              <div key={program.id} className="bg-gray-900 p-5 rounded-xl shadow-lg">
+                <h3 className="text-xl font-semibold text-white mb-2">{program.name}</h3>
+                <p className="text-gray-400">{program.description}</p>
+              </div>
+            ))}
+            {filteredPrograms.length === 0 && (
+              <p className="text-gray-400 text-center col-span-full">No programs match your search.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

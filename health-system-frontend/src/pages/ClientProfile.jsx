@@ -1,34 +1,69 @@
-import { useParams, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { FaMale, FaFemale, FaTrash, FaEdit } from 'react-icons/fa';
 
 const ClientProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [client, setClient] = useState({
     id,
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+254712345678',
-    gender: 'Male',
-    programs: ['TB', 'HIV']
+    name: '',
+    email: '',
+    phone: '',
+    gender: '',
+    programs: [],
   });
 
+  // Fetch the client data from the backend
+  useEffect(() => {
+    fetch(`https://your-api.com/clients/${id}`)
+      .then((response) => response.json())
+      .then((data) => setClient(data))
+      .catch((error) => console.error('Error fetching client data:', error));
+  }, [id]);
+
+  // Handle client deletion
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete this client?')) {
-      console.log('Client deleted:', client.id);
+      fetch(`https://your-api.com/clients/${client.id}`, {
+        method: 'DELETE',
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log('Client deleted');
+            navigate('/clients'); // Navigate back to clients list
+          } else {
+            console.error('Error deleting client');
+          }
+        })
+        .catch((error) => console.error('Error deleting client:', error));
     }
   };
 
+  // Handle input changes during edit
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setClient((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle client details update
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    console.log('Updated client:', client);
-    setIsEditing(false);
+    fetch(`https://your-api.com/clients/${client.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(client),
+    })
+      .then((response) => response.json())
+      .then((updatedClient) => {
+        console.log('Updated client:', updatedClient);
+        setClient(updatedClient);
+        setIsEditing(false); // Exit editing mode
+      })
+      .catch((error) => console.error('Error updating client:', error));
   };
 
   return (
