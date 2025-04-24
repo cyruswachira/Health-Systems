@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs';
 import Clients from './pages/Clients';
@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <Router>
+    <>
       <Navbar />
       <div className="p-4">
         <Routes>
@@ -21,7 +21,7 @@ function App() {
           <Route path="/clients/:id" element={<ClientProfile />} />
         </Routes>
       </div>
-    </Router>
+    </>
   );
 }
 
