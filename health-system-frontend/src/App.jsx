@@ -1,13 +1,27 @@
-import React from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import Programs from './pages/Programs';
+import Clients from './pages/Clients';
+import CreateProgram from './pages/CreateProgram';
+import RegisterClient from './pages/RegisterClient';
+import ClientProfile from './pages/ClientProfile';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <div className="bg-blue-500 text-white min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Tailwind CSS Test</h1>
-        <p className="text-8xl">If you see this styled text, Tailwind is working!</p>
+    <Router>
+      <Navbar />
+      <div className="p-4">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/programs/create" element={<CreateProgram />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/clients/register" element={<RegisterClient />} />
+          <Route path="/clients/:id" element={<ClientProfile />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
