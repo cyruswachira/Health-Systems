@@ -4,7 +4,7 @@ import ClientCard from '../components/ClientCard'; // Ensure correct path
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:5000/api/clients')  
@@ -15,7 +15,8 @@ const Clients = () => {
 
   return (
     <div className="min-h-screen bg-black p-8 relative">
-      
+
+      {/* Register Client Button */}
       <div className="absolute top-4 right-4 z-50">
         <button
           onClick={() => navigate('/clients/register')}  
@@ -25,9 +26,11 @@ const Clients = () => {
         </button>
       </div>
 
+      {/* Title */}
       <h2 className="text-3xl font-bold text-white text-center mb-6">Registered Clients</h2>
 
-      <div className="flex flex-wrap justify-center gap-8 mt-10">
+      {/* Client Cards */}
+      <div className="flex flex-wrap justify-between gap-8 mt-10">
         {clients.length === 0 ? (
           <p className="text-white">No clients registered yet.</p>
         ) : (
