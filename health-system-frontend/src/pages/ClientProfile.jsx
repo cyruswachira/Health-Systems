@@ -14,25 +14,32 @@ const ClientProfile = () => {
     gender: '',
     programs: [],
   });
+  const [loading, setLoading] = useState(true);
 
   // Fetch the client data from the backend
   useEffect(() => {
-    fetch(`https://your-api.com/clients/${id}`)
+    fetch(`http://127.0.0.1:5000/api/clients/${id}`)
       .then((response) => response.json())
-      .then((data) => setClient(data))
-      .catch((error) => console.error('Error fetching client data:', error));
+      .then((data) => {
+        setClient(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching client data:', error);
+        setLoading(false);
+      });
   }, [id]);
 
   // Handle client deletion
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete this client?')) {
-      fetch(`https://your-api.com/clients/${client.id}`, {
+      fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
         method: 'DELETE',
       })
         .then((response) => {
           if (response.ok) {
             console.log('Client deleted');
-            navigate('/clients'); // Navigate back to clients list
+            navigate('/clients');
           } else {
             console.error('Error deleting client');
           }
@@ -50,7 +57,7 @@ const ClientProfile = () => {
   // Handle client details update
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    fetch(`https://your-api.com/clients/${client.id}`, {
+    fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -61,10 +68,18 @@ const ClientProfile = () => {
       .then((updatedClient) => {
         console.log('Updated client:', updatedClient);
         setClient(updatedClient);
-        setIsEditing(false); // Exit editing mode
+        setIsEditing(false);
       })
       .catch((error) => console.error('Error updating client:', error));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex justify-center items-center">
+        <p className="text-xl text-gray-300">Loading client profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex justify-center items-center px-6 py-8 relative">
@@ -169,7 +184,11 @@ const ClientProfile = () => {
         <div className="mb-6">
           <p className="text-xl font-semibold text-white">Enrolled Programs:</p>
           <ul className="list-disc list-inside text-lg text-gray-400">
-            {client.programs.map((program, i) => <li key={i}>{program}</li>)}
+            {Array.isArray(client.programs) && client.programs.length > 0 ? (
+              client.programs.map((program, i) => <li key={i}>{program}</li>)
+            ) : (
+              <li>No programs enrolled</li>
+            )}
           </ul>
         </div>
 

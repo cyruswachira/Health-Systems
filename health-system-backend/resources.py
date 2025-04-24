@@ -6,7 +6,9 @@ from flask_cors import CORS
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
-CORS(api_bp)  # Enable CORS for the API
+
+# Enable CORS for the entire API
+CORS(api_bp, resources={r"/*": {"origins": "*"}})
 
 class ProgramListResource(Resource):
     def get(self):
@@ -41,15 +43,18 @@ class ProgramListResource(Resource):
 
 class ClientListResource(Resource):
     def get(self):
-        clients = Client.query.all()
-        return jsonify([{
-            'id': c.id,
-            'name': c.name,
-            'email': c.email,
-            'phone': c.phone,
-            'gender': c.gender,
-            'selectedPrograms': c.selected_programs
-        } for c in clients])
+        try:
+            clients = Client.query.all()
+            return jsonify([{
+                'id': c.id,
+                'name': c.name,
+                'email': c.email,
+                'phone': c.phone,
+                'gender': c.gender,
+                'selectedPrograms': c.selected_programs
+            } for c in clients])
+        except Exception as e:
+            return {'message': f'Error fetching clients: {str(e)}'}, 500
 
     def post(self):
         try:
@@ -59,7 +64,7 @@ class ClientListResource(Resource):
                 email=data['email'],
                 phone=data['phone'],
                 gender=data['gender'],
-                selected_programs=data['selectedPrograms']
+                selected_programs=data.get('selectedPrograms', [])
             )
             db.session.add(new_client)
             db.session.commit()
@@ -68,6 +73,20 @@ class ClientListResource(Resource):
             return {'message': f'Error registering client: {str(e)}'}, 500
 
 class ClientResource(Resource):
+    def get(self, client_id):
+        try:
+            client = Client.query.get_or_404(client_id)
+            return jsonify({
+                'id': client.id,
+                'name': client.name,
+                'email': client.email,
+                'phone': client.phone,
+                'gender': client.gender,
+                'selectedPrograms': client.selected_programs
+            })
+        except Exception as e:
+            return {'message': f'Error fetching client: {str(e)}'}, 500
+
     def put(self, client_id):
         try:
             client = Client.query.get_or_404(client_id)

@@ -13,4 +13,4 @@ class Client(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(20), nullable=True)
     gender = db.Column(db.String(10), nullable=True)
-    selected_programs = db.Column(db.PickleType)  # Storing list of program IDs
+    selected_programs = db.Column(db.PickleType)  # List of program IDs (ints)
