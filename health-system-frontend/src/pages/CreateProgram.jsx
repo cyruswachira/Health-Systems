@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const CreateProgram = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [loading, setLoading] = useState(false); 
-  const [error, setError] = useState(null); 
-  const navigate = useNavigate(); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // Your Flask backend base URL
+  const API_BASE_URL = 'http://127.0.0.1:5000';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,12 +19,11 @@ const CreateProgram = () => {
       description,
     };
 
-    setLoading(true); 
-    setError(null); 
+    setLoading(true);
+    setError(null);
 
     try {
-      
-      const response = await fetch('/api/programs', {
+      const response = await fetch(`${API_BASE_URL}/api/programs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,19 +31,21 @@ const CreateProgram = () => {
         body: JSON.stringify(programData),
       });
 
-      if (response.ok) {
-        
-        navigate('/programs');
-      } else {
-        
+      if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.message || 'Failed to create program');
+        throw new Error(errorData.message || 'Failed to create program');
       }
+
+      const result = await response.json();
+      console.log('Program created:', result.message);
+
+      // Redirect to /programs or any other page
+      navigate('/programs');
     } catch (error) {
-      
-      setError('Error submitting program: ' + error.message);
+      console.error('Error creating program:', error);
+      setError(error.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -53,7 +57,6 @@ const CreateProgram = () => {
       >
         <h2 className="text-2xl font-bold text-blue-400 mb-6 text-center">Create Program</h2>
 
-        
         {error && (
           <div className="text-red-500 text-center mb-4">
             {error}
@@ -80,8 +83,8 @@ const CreateProgram = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold shadow-lg transition-all duration-300"
-          disabled={loading} 
+          className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={loading}
         >
           {loading ? 'Creating...' : 'Create'}
         </button>

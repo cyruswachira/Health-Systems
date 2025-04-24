@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import ClientCard from '../components/ClientCard'; // Ensure correct path
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
@@ -26,18 +27,12 @@ const Clients = () => {
 
       <h2 className="text-3xl font-bold text-white text-center mb-6">Registered Clients</h2>
 
-      <div className="flex flex-wrap justify-center gap-6">
+      <div className="flex flex-wrap justify-center gap-8 mt-10">
         {clients.length === 0 ? (
           <p className="text-white">No clients registered yet.</p>
         ) : (
           clients.map((client) => (
-            <div key={client.id} className="bg-gray-800 text-white p-6 rounded-xl shadow-md w-60">
-              <h3 className="text-xl font-semibold">{client.name}</h3>
-              <p>Email: {client.email}</p>
-              <p>Phone: {client.phone}</p>
-              <p>Gender: {client.gender}</p>
-              <p>Programs: {client.selectedPrograms.join(', ')}</p>
-            </div>
+            <ClientCard key={client.id} client={client} />
           ))
         )}
       </div>
