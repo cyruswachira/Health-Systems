@@ -5,6 +5,8 @@ import Clients from './pages/Clients';
 import CreateProgram from './pages/CreateProgram';
 import RegisterClient from './pages/RegisterClient';
 import ClientProfile from './pages/ClientProfile';
+import LoginPage from './pages/LoginPage'; 
+import SignupPage from './pages/SignupPage'; 
 import Navbar from './components/Navbar';
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
           <Route path="/clients" element={<Clients />} />
           <Route path="/clients/register" element={<RegisterClient />} />
           <Route path="/clients/:id" element={<ClientProfile />} />
+          <Route path="/login" element={<LoginPage />} />  
+          <Route path="/signup" element={<SignupPage />} />  
         </Routes>
       </div>
     </>

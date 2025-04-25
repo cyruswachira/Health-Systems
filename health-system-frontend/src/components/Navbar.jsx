@@ -1,7 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate(); // Hook to programmatically navigate
+
+  const handleLogout = () => {
+    // You can clear any user data or tokens here if needed
+    // localStorage.removeItem("authToken"); // Example to remove token from localStorage
+    navigate('/login'); // Navigate to login page after logout
+  };
+
   return (
     <nav className="m-4 mt-6 bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500 shadow-2xl px-10 py-6 text-white flex items-center justify-between rounded-3xl font-poppins">
       <h1 className="text-4xl font-extrabold tracking-wide drop-shadow-lg">
@@ -26,6 +34,13 @@ const Navbar = () => {
         >
           Clients
         </Link>
+        {/* Enhanced Log Out button */}
+        <button
+          onClick={handleLogout}
+          className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-full shadow-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
+        >
+          LOG OUT
+        </button>
       </div>
     </nav>
   );
