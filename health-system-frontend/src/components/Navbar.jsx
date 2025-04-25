@@ -33,7 +33,6 @@ const Navbar = () => {
         >
           Clients
         </Link>
-        {/* Enhanced Log Out button */}
         <button
           onClick={handleLogout}
           className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-full shadow-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"

@@ -21,7 +21,7 @@ const ClientProfile = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/clients/${id}`);
+        const response = await fetch(`https://health-info-systems.onrender.com/api/clients/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch client details');
         }
@@ -36,7 +36,7 @@ const ClientProfile = () => {
 
     const fetchPrograms = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/programs');
+        const response = await fetch('https://health-info-systems.onrender.com/api/programs');
         if (!response.ok) {
           throw new Error('Failed to fetch programs');
         }
@@ -60,7 +60,7 @@ const ClientProfile = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to remove this client from the system?')) {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
+        const response = await fetch(`https://health-info-systems.onrender.com/api/clients/${client.id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -82,7 +82,7 @@ const ClientProfile = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
+      const response = await fetch(`https://health-info-systems.onrender.com/api/clients/${client.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/login', {
+      const response = await fetch('https://health-info-systems.onrender.com/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,10 +47,9 @@ const LoginPage = () => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Image */}
       <div className="w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${doctorImage})` }}></div>
 
-      {/* Right Form (Styled same as SignupPage) */}
+      
       <div className="w-1/2 flex items-center justify-center bg-gray-900 text-white">
         <div className="max-w-md w-full space-y-8 p-8 bg-opacity-60 rounded-lg shadow-lg backdrop-blur-md">
           <h2 className="text-3xl font-bold text-center">Login</h2>

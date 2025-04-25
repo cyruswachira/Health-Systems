@@ -7,7 +7,7 @@ const Clients = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/clients')  
+    fetch('https://health-info-systems.onrender.com/api/clients')  
       .then((res) => res.json())
       .then((data) => setClients(data))
       .catch((err) => console.error('Error fetching clients:', err));

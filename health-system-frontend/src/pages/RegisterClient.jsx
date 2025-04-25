@@ -13,7 +13,7 @@ const RegisterClient = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/programs')
+    fetch('https://health-info-systems.onrender.com/api/programs')
       .then((res) => res.json())
       .then((data) => setPrograms(data))
       .catch((err) => console.error('Error fetching programs:', err));
@@ -55,7 +55,7 @@ const RegisterClient = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/clients', {
+      const response = await fetch('https://health-info-systems.onrender.com/api/clients', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(clientData),
@@ -69,7 +69,7 @@ const RegisterClient = () => {
         setGender('');
         setSelectedPrograms([]);
 
-        // Redirect to /clients
+        
         navigate('/clients');
       } else {
         const error = await response.json();

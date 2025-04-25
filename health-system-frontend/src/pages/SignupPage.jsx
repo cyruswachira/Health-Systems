@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
+import { useNavigate } from 'react-router-dom'; 
 import doctorImage from '../assets/doctor.jpg'; 
 
 const SignupPage = () => {
@@ -9,7 +9,7 @@ const SignupPage = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();  // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const validateForm = () => {
     if (!username || !email || !password) {
@@ -34,7 +34,7 @@ const SignupPage = () => {
     setLoading(true);
   
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/signup', {
+      const response = await fetch('https://health-info-systems.onrender.com/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const SignupPage = () => {
         setUsername('');
         setEmail('');
         setPassword('');
-        navigate('/login');  // Redirect to login page after successful sign-up
+        navigate('/login'); 
       } else {
         setMessage('');
         setError(result.message || 'Something went wrong.');

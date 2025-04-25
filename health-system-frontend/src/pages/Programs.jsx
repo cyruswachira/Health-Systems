@@ -8,7 +8,7 @@ const Programs = () => {
 
   const fetchPrograms = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/programs');
+      const response = await fetch('https://health-info-systems.onrender.com/api/programs');
       const data = await response.json();
       setPrograms(data);
     } catch (error) {
