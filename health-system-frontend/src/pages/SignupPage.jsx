@@ -70,6 +70,15 @@ const SignupPage = () => {
       
       <div className="w-1/2 flex items-center justify-center bg-gray-900 text-white">
         <div className="max-w-md w-full space-y-8 p-8 bg-opacity-60 rounded-lg shadow-lg backdrop-blur-md">
+          <div className="absolute top-4 right-4">
+            <button
+              onClick={() => navigate('/login')}
+              className="px-4 py-2 bg-yellow-500 text-black rounded-full font-semibold hover:bg-yellow-600 focus:outline-none"
+            >
+              Login
+            </button>
+          </div>
+
           <h2 className="text-3xl font-bold text-center">Sign Up</h2>
           <form onSubmit={handleSubmit} className="space-y-6 mt-4">
             <div>
@@ -111,10 +120,6 @@ const SignupPage = () => {
               {loading ? 'Signing Up...' : 'Sign Up'}
             </button>
           </form>
-          <div className="mt-4 text-center">
-            <p className="text-gray-300">Already have an account?</p>
-            <a href="/login" className="text-yellow-500 hover:underline">Login</a>
-          </div>
         </div>
       </div>
     </div>
