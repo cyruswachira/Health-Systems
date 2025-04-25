@@ -2,12 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
-  const navigate = useNavigate(); // Hook to programmatically navigate
+  const navigate = useNavigate(); 
 
   const handleLogout = () => {
-    // You can clear any user data or tokens here if needed
-    // localStorage.removeItem("authToken"); // Example to remove token from localStorage
-    navigate('/login'); // Navigate to login page after logout
+  
+    navigate('/login'); 
   };
 
   return (
@@ -17,7 +16,7 @@ const Navbar = () => {
       </h1>
       <div className="space-x-6 text-lg font-semibold">
         <Link
-          to="/"
+          to="/dashboard"
           className="bg-white text-blue-800 px-5 py-2 rounded-full shadow-md transition-all duration-300 hover:bg-blue-100 hover:scale-105"
         >
           Dashboard
