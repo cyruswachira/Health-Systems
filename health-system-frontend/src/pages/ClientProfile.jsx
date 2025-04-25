@@ -1,6 +1,6 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FaMale, FaFemale, FaTrash, FaEdit } from 'react-icons/fa';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 const ClientProfile = () => {
   const { id } = useParams();
@@ -12,71 +12,107 @@ const ClientProfile = () => {
     email: '',
     phone: '',
     gender: '',
-    programs: [],
+    selectedPrograms: [],
   });
+  const [programs, setPrograms] = useState([]);
+  const [programMap, setProgramMap] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // Fetch the client data from the backend
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/api/clients/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchClientData = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/api/clients/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch client details');
+        }
+        const data = await response.json();
         setClient(data);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching client data:', error);
+      } catch (error) {
+        console.error('Error fetching client details:', error);
         setLoading(false);
-      });
+      }
+    };
+
+    const fetchPrograms = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/programs');
+        if (!response.ok) {
+          throw new Error('Failed to fetch programs');
+        }
+        const data = await response.json();
+        setPrograms(data);
+
+        const map = {};
+        data.forEach((program) => {
+          map[program.id.toString()] = program.name;
+        });
+        setProgramMap(map);
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+      }
+    };
+
+    fetchClientData();
+    fetchPrograms();
   }, [id]);
 
-  // Handle client deletion
-  const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this client?')) {
-      fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
-        method: 'DELETE',
-      })
-        .then((response) => {
-          if (response.ok) {
-            console.log('Client deleted');
-            navigate('/clients');
-          } else {
-            console.error('Error deleting client');
-          }
-        })
-        .catch((error) => console.error('Error deleting client:', error));
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to remove this client from the system?')) {
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error('Error deleting client');
+        }
+        console.log('Client successfully removed');
+        navigate('/clients');
+      } catch (error) {
+        console.error('Error removing client:', error);
+      }
     }
   };
 
-  // Handle input changes during edit
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setClient((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle client details update
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
-    fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(client),
-    })
-      .then((response) => response.json())
-      .then((updatedClient) => {
-        console.log('Updated client:', updatedClient);
-        setClient(updatedClient);
-        setIsEditing(false);
-      })
-      .catch((error) => console.error('Error updating client:', error));
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/api/clients/${client.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(client),
+      });
+      if (!response.ok) {
+        throw new Error('Error updating client data');
+      }
+      const updatedClient = await response.json();
+      console.log('Client data updated:', updatedClient);
+      setClient(updatedClient);
+      setIsEditing(false);
+      navigate('/clients');
+    } catch (error) {
+      console.error('Error updating client data:', error);
+    }
+  };
+
+  const getProgramNames = (programIds) => {
+    if (!programIds || !Array.isArray(programIds)) return [];
+    return programIds
+      .map((id) => programMap[id.toString()])
+      .filter(Boolean);
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-black text-white flex justify-center items-center">
-        <p className="text-xl text-gray-300">Loading client profile...</p>
+        <p className="text-xl text-gray-300">Fetching client profile...</p>
       </div>
     );
   }
@@ -86,7 +122,7 @@ const ClientProfile = () => {
       {isEditing && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <div className="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-blue-400">Edit Client</h2>
+            <h2 className="text-2xl font-bold mb-4 text-blue-400">Update Client Information</h2>
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <input
                 type="text"
@@ -94,7 +130,7 @@ const ClientProfile = () => {
                 value={client.name}
                 onChange={handleEditChange}
                 className="w-full p-2 rounded bg-gray-800 text-white"
-                placeholder="Name"
+                placeholder="Full Name"
               />
               <input
                 type="email"
@@ -102,7 +138,7 @@ const ClientProfile = () => {
                 value={client.email}
                 onChange={handleEditChange}
                 className="w-full p-2 rounded bg-gray-800 text-white"
-                placeholder="Email"
+                placeholder="Email Address"
               />
               <input
                 type="text"
@@ -110,7 +146,7 @@ const ClientProfile = () => {
                 value={client.phone}
                 onChange={handleEditChange}
                 className="w-full p-2 rounded bg-gray-800 text-white"
-                placeholder="Phone"
+                placeholder="Phone Number"
               />
               <select
                 name="gender"
@@ -160,11 +196,11 @@ const ClientProfile = () => {
           )}
         </div>
 
-        <h1 className="text-2xl font-bold text-blue-400 text-center mb-6">Client Profile</h1>
+        <h1 className="text-3xl font-semibold text-blue-400 text-center mb-6">Client Profile</h1>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <p className="text-xl font-semibold text-white">Name:</p>
+            <p className="text-xl font-semibold text-white">Full Name:</p>
             <p className="text-lg text-gray-400">{client.name}</p>
           </div>
           <div>
@@ -172,20 +208,20 @@ const ClientProfile = () => {
             <p className="text-lg text-gray-400">{client.gender}</p>
           </div>
           <div>
-            <p className="text-xl font-semibold text-white">Email:</p>
+            <p className="text-xl font-semibold text-white">Email Address:</p>
             <p className="text-lg text-gray-400">{client.email}</p>
           </div>
           <div>
-            <p className="text-xl font-semibold text-white">Phone:</p>
+            <p className="text-xl font-semibold text-white">Phone Number:</p>
             <p className="text-lg text-gray-400">{client.phone}</p>
           </div>
         </div>
 
         <div className="mb-6">
-          <p className="text-xl font-semibold text-white">Enrolled Programs:</p>
+          <p className="text-xl font-semibold text-white">Programs Enrolled:</p>
           <ul className="list-disc list-inside text-lg text-gray-400">
-            {Array.isArray(client.programs) && client.programs.length > 0 ? (
-              client.programs.map((program, i) => <li key={i}>{program}</li>)
+            {getProgramNames(client.selectedPrograms).length > 0 ? (
+              getProgramNames(client.selectedPrograms).map((program, i) => <li key={i}>{program}</li>)
             ) : (
               <li>No programs enrolled</li>
             )}

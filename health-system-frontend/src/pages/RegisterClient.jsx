@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterClient = () => {
   const [programs, setPrograms] = useState([]);
@@ -9,7 +10,8 @@ const RegisterClient = () => {
   const [gender, setGender] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Fetch all available programs on mount
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetch('http://localhost:5000/api/programs')
       .then((res) => res.json())
@@ -17,23 +19,21 @@ const RegisterClient = () => {
       .catch((err) => console.error('Error fetching programs:', err));
   }, []);
 
-  const handleProgramChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      if (selectedPrograms.length < 2) {
-        setSelectedPrograms((prev) => [...prev, value]);
-      } else {
-        alert('You can only select up to 2 programs.');
-      }
+  const toggleProgram = (programId) => {
+    if (selectedPrograms.includes(programId)) {
+      setSelectedPrograms((prev) => prev.filter((id) => id !== programId));
     } else {
-      setSelectedPrograms((prev) => prev.filter((id) => id !== value));
+      if (selectedPrograms.length >= 2) {
+        alert('You can only select up to 2 programs.');
+        return;
+      }
+      setSelectedPrograms((prev) => [...prev, programId]);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic form validation
     if (!name || !email || !phone || !gender || selectedPrograms.length === 0) {
       alert('Please fill out all fields and select at least one program.');
       return;
@@ -63,12 +63,14 @@ const RegisterClient = () => {
 
       if (response.ok) {
         alert('Client registered successfully!');
-        // Clear form
         setName('');
         setEmail('');
         setPhone('');
         setGender('');
         setSelectedPrograms([]);
+
+        // Redirect to /clients
+        navigate('/clients');
       } else {
         const error = await response.json();
         alert(`Failed to register client: ${error.message || 'Unknown error'}`);
@@ -111,29 +113,21 @@ const RegisterClient = () => {
         />
 
         <div className="mb-6">
-          <p className="text-white font-medium mb-2">Select Programs (Max 2)</p>
+          <p className="text-white font-medium mb-3">Select Programs (Max 2)</p>
           <div className="flex flex-wrap gap-3">
             {programs.map((program) => (
-              <div key={program.id} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={`program-${program.id}`}
-                  value={program.id}
-                  onChange={handleProgramChange}
-                  checked={selectedPrograms.includes(program.id)}
-                  disabled={selectedPrograms.length >= 2 && !selectedPrograms.includes(program.id)}
-                  className="hidden"
-                />
-                <label
-                  htmlFor={`program-${program.id}`}
-                  className={`cursor-pointer px-4 py-2 rounded-full text-sm font-medium ${
+              <div
+                key={program.id}
+                onClick={() => toggleProgram(program.id)}
+                className={`cursor-pointer px-5 py-2 rounded-full text-sm font-medium border transition duration-200
+                  ${
                     selectedPrograms.includes(program.id)
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-700 text-white hover:bg-blue-500'
-                  }`}
-                >
-                  {program.name}
-                </label>
+                      ? 'bg-yellow-500 text-black border-yellow-400'
+                      : 'bg-gray-700 text-white hover:bg-blue-600 border-gray-600'
+                  }
+                `}
+              >
+                {program.name}
               </div>
             ))}
           </div>
@@ -149,7 +143,6 @@ const RegisterClient = () => {
             <option value="">-- Select Gender --</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-            <option value="Other">Other</option>
           </select>
         </div>
 

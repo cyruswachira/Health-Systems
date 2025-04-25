@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ClientCard from '../components/ClientCard'; // Ensure correct path
+import ClientCard from '../components/ClientCard';
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
@@ -14,9 +14,8 @@ const Clients = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black p-8 relative">
-
-      {/* Register Client Button */}
+    <div className="min-h-screen bg-black px-8 py-8 relative">
+    
       <div className="absolute top-4 right-4 z-50">
         <button
           onClick={() => navigate('/clients/register')}  
@@ -26,13 +25,13 @@ const Clients = () => {
         </button>
       </div>
 
-      {/* Title */}
+    
       <h2 className="text-3xl font-bold text-white text-center mb-6">Registered Clients</h2>
 
-      {/* Client Cards */}
-      <div className="flex flex-wrap justify-between gap-8 mt-10">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10 mx-auto max-w-screen-lg">
         {clients.length === 0 ? (
-          <p className="text-white">No clients registered yet.</p>
+          <p className="text-white text-center col-span-3">No clients registered yet.</p>
         ) : (
           clients.map((client) => (
             <ClientCard key={client.id} client={client} />

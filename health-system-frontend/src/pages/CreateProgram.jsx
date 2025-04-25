@@ -8,7 +8,7 @@ const CreateProgram = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Your Flask backend base URL
+  
   const API_BASE_URL = 'http://127.0.0.1:5000';
 
   const handleSubmit = async (e) => {
@@ -39,7 +39,7 @@ const CreateProgram = () => {
       const result = await response.json();
       console.log('Program created:', result.message);
 
-      // Redirect to /programs or any other page
+    
       navigate('/programs');
     } catch (error) {
       console.error('Error creating program:', error);

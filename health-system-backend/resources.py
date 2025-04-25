@@ -7,7 +7,7 @@ from flask_cors import CORS
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
-# Enable CORS for the entire API
+
 CORS(api_bp, resources={r"/*": {"origins": "*"}})
 
 class ProgramListResource(Resource):

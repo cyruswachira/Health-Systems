@@ -5,13 +5,13 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [clients, setClients] = useState([]);
   const [programs, setPrograms] = useState([]);
+  const [programMap, setProgramMap] = useState({});
 
-  // Fetch clients and programs from the API when the component mounts
+  
   useEffect(() => {
-    // Fetch clients from API
     const fetchClients = async () => {
       try {
-        const response = await fetch('/api/clients'); // Replace with your API URL
+        const response = await fetch('http://127.0.0.1:5000/api/clients');
         const data = await response.json();
         setClients(data);
       } catch (error) {
@@ -19,12 +19,18 @@ const Dashboard = () => {
       }
     };
 
-    // Fetch programs from API
     const fetchPrograms = async () => {
       try {
-        const response = await fetch('/api/programs'); // Replace with your API URL
+        const response = await fetch('http://127.0.0.1:5000/api/programs');
         const data = await response.json();
         setPrograms(data);
+
+      
+        const map = {};
+        data.forEach((program) => {
+          map[program.id] = program.name;
+        });
+        setProgramMap(map);
       } catch (error) {
         console.error('Error fetching programs:', error);
       }
@@ -34,15 +40,18 @@ const Dashboard = () => {
     fetchPrograms();
   }, []);
 
-  // Filtered clients based on search term
+  const getProgramNames = (programIds) => {
+    if (!Array.isArray(programIds)) return [];
+    return programIds.map((id) => programMap[id]).filter(Boolean);
+  };
+
   const filteredClients = clients.filter(
-    client =>
+    (client) =>
       client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.program.toLowerCase().includes(searchTerm.toLowerCase())
+      getProgramNames(client.selectedPrograms).join(', ').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Filtered programs based on search term
-  const filteredPrograms = programs.filter(program =>
+  const filteredPrograms = programs.filter((program) =>
     program.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -52,10 +61,9 @@ const Dashboard = () => {
         <h1 className="text-4xl font-extrabold text-blue-400 mb-6">Dashboard</h1>
         <p className="text-lg text-gray-300 mb-8">
           <span className="text-yellow-400 font-semibold">Health Information System</span>
-          <br />
         </p>
 
-        {/* Search Input */}
+      
         <div className="flex items-center gap-4 bg-gray-900 p-4 rounded-xl shadow mb-10">
           <FaSearch className="text-gray-400 text-xl" />
           <input
@@ -67,11 +75,11 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Dashboard Stats */}
+        
         <div className="flex justify-center gap-8 mb-10">
           <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-center flex-1">
             <h2 className="text-3xl font-bold text-blue-500">{programs.length}</h2>
-            <p className="text-gray-300">Programs Enrolled</p>
+            <p className="text-gray-300">Programs Available</p>
           </div>
           <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-center flex-1">
             <h2 className="text-3xl font-bold text-green-400">{clients.length}</h2>
@@ -79,14 +87,22 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Display Clients */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredClients.map((client) => (
             <div key={client.id} className="bg-gray-900 p-5 rounded-xl shadow-lg">
               <h3 className="text-xl font-semibold text-white mb-2">{client.name}</h3>
               <p className="text-gray-400">Email: {client.email}</p>
+              <p className="text-gray-400">Phone: {client.phone}</p>
+              <p className="text-gray-400">Gender: {client.gender}</p>
               <p className="text-gray-400">
-                Program: <span className="text-yellow-400 font-semibold">{client.program}</span>
+                Programs:{' '}
+                {getProgramNames(client.selectedPrograms).length > 0 ? (
+                  <span className="text-yellow-400 font-semibold">
+                    {getProgramNames(client.selectedPrograms).join(', ')}
+                  </span>
+                ) : (
+                  <span className="text-gray-500 italic">None</span>
+                )}
               </p>
             </div>
           ))}
@@ -95,7 +111,7 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Display Programs */}
+      
         <div className="mt-10">
           <h2 className="text-3xl font-semibold text-blue-400 mb-4">Programs</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
