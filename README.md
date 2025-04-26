@@ -5,14 +5,16 @@ A detailed presentation covering the **approach**, **design** and **solution** c
 
  [Click here to view the presentation](https://wonderslide.com/s/kgo6tr3f/)
 
----
-
 ##  Live Demo
 Experience the full functionality of the Health Systems platform through the live deployment:
 
 [Click here to access the live demo](https://health-systems.onrender.com/)
 
----
+## Demo Video
+Watch a recorded walkthrough of the platform:
+
+[Click here to access the live demo](https://drive.google.com/file/d/13ogN1VIty2xzh_J6CnS2N4_jDlymBZP5/view?usp=drive_link)
+
 
 ##  Overview
 This project provides a complete solution for managing and supporting health systems. The system integrates both frontend and backend components for a seamless user experience and administrative control.
