@@ -1,15 +1,5 @@
 # Health Systems Project
 
-##  Overview
-This project provides a complete solution for managing and supporting health systems. The system integrates both frontend and backend components for a seamless user experience and administrative control.
-
-It includes:
-- A clear approach to identifying and solving challenges in health management
-- A user-friendly frontend built for engagement and accessibility
-- A robust backend to handle data, user actions and secure operations
-
----
-
 ## Project Presentation
 A detailed presentation covering the **approach**, **design** and **solution** can be accessed below:
 
@@ -21,6 +11,16 @@ A detailed presentation covering the **approach**, **design** and **solution** c
 Experience the full functionality of the Health Systems platform through the live deployment:
 
 [Click here to access the live demo](https://health-systems.onrender.com/)
+
+---
+
+##  Overview
+This project provides a complete solution for managing and supporting health systems. The system integrates both frontend and backend components for a seamless user experience and administrative control.
+
+It includes:
+- A clear approach to identifying and solving challenges in health management
+- A user-friendly frontend built for engagement and accessibility
+- A robust backend to handle data, user actions and secure operations
 
 ---
 
