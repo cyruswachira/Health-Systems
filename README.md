@@ -24,7 +24,6 @@ It includes:
 - A user-friendly frontend built for engagement and accessibility
 - A robust backend to handle data, user actions and secure operations
 
----
 
 ## Project Structure
 
