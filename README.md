@@ -13,7 +13,7 @@ Experience the full functionality of the Health Systems platform through the liv
 ## Demo Video
 Watch a recorded walkthrough of the platform:
 
-[Click here to access the live demo](https://drive.google.com/file/d/13ogN1VIty2xzh_J6CnS2N4_jDlymBZP5/view?usp=drive_link)
+[Click here to access the live demo](https://drive.google.com/file/d/1gQhUh910VuNFoCXEixDdXsAcNTKVpi8W/view?usp=drive_link)
 
 
 ##  Overview
